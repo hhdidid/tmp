@@ -1,0 +1,38 @@
+<div class="container">
+  <h1>Sign in</h1>
+
+  <form [formGroup]="signinForm" #formDir="ngForm" (ngSubmit)="signin()">
+
+    <div class="form-group">
+      <input id="username" class="form-control" type="text" formControlName="username" placeholder="username" required>
+
+      <div *ngIf="username.pending ">validating...</div>
+      <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
+        <div *ngIf="username.errors.required">username is required.</div>
+        <div *ngIf="username.errors.forbiddenName">username should not begin or end with '_' and requires at least one character/letter/number.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <input id="password" class="form-control" type="password" formControlName="password" placeholder="password" required>
+      <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+        <div *ngIf="password.errors.required">password is required.</div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-default"
+            [disabled]="signinForm.invalid">sign in</button>
+    <button type="button" class="btn btn-default"
+            (click)="formDir.resetForm({})">reset</button>
+  </form>
+
+</div>
+<p>
+  Form Value: {{ signinForm.value | json}}
+</p>
+
+<p>
+  Form Status: {{ signinForm.status }}
+</p>
+
+

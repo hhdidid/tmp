@@ -1,0 +1,61 @@
+<div class="container">
+  <h1>Sign up</h1>
+
+  <form [formGroup]="signupForm" #formDir="ngForm" (ngSubmit)="signup()">
+
+    <div class="form-group">
+      <input id="username" class="form-control" type="text" formControlName="username" placeholder="username" required>
+
+      <div *ngIf="username.pending ">validating...</div>
+      <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
+        <div *ngIf="username.errors.required">username is required.</div>
+        <div *ngIf="username.errors.forbiddenName">username should not begin or end with '_' and requires at least one character/letter/number.</div>
+        <div *ngIf="username.errors?.uniqueUser">username has been used.</div>
+      </div>
+    </div>
+
+    <div class="form-group row" formGroupName="passwords">
+      <div class="form-group">
+        <input id="password" class="form-control" type="password" formControlName="password" placeholder="password" required>
+        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+          <div *ngIf="password.errors.required">password is required.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input id="comfirm" class="form-control" type="password" formControlName="comfirm" placeholder="comfirm password" required>
+        <div *ngIf="comfirm.invalid && (comfirm.dirty || comfirm.touched)" class="alert alert-danger">
+          <div *ngIf="comfirm.errors.required">comfirm is required.</div>
+        </div>
+      </div>
+
+      <div *ngIf="passwords.pending">validating...</div>
+      <div *ngIf="passwords.invalid && (passwords.dirty || passwords.touched)" class="alert alert-danger">
+        <div *ngIf="passwords.errors?.pwdEqual">inconsistent password</div>
+      </div>
+
+    </div>
+
+    <div class="form-group">
+      <input id="email" class="form-control" type="email" formControlName="email" placeholder="email" required>
+
+      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+        <div *ngIf="email.errors.required">email is required.</div>
+        <div *ngIf="email.errors.email">invalid email format.</div>
+      </div>
+    </div>
+
+
+    <button type="submit" class="btn btn-default"
+            [disabled]="signupForm.invalid">sign up</button>
+    <button type="button" class="btn btn-default"
+            (click)="formDir.resetForm({})">reset</button>
+  </form>
+
+</div>
+<p>
+  Form Value: {{ signupForm.value | json}}
+</p>
+
+<p>
+  Form Status: {{ signupForm.status }}
+</p>

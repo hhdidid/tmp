@@ -1,0 +1,35 @@
+<div class="container">
+  <h1>{{ user.username }} Profile</h1>
+  <img src={{user.gravatar}} /> <br/>
+
+  <form [formGroup]="profileForm" #formDir="ngForm" (ngSubmit)="save()">
+
+    <label for="username">username</label>
+    <div class="form-group">
+      <input id="username" class="form-control" type="text" formControlName="username" placeholder="username" required>
+
+      <div *ngIf="username.pending ">validating...</div>
+      <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
+        <div *ngIf="username.errors.required">username is required.</div>
+        <div *ngIf="username.errors.forbiddenName">username should not begin or end with '_' and requires at least one character/letter/number.</div>
+        <div *ngIf="username.errors?.uniqueUser">username has been used.</div>
+      </div>
+    </div>
+
+    <label for="email">email</label>
+    <div class="form-group">
+      <input id="email" class="form-control" type="email" formControlName="email" placeholder="email" required>
+
+      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+        <div *ngIf="email.errors.required">email is required.</div>
+        <div *ngIf="email.errors.email">invalid email format.</div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-default"
+            [disabled]="profileForm.invalid || profileForm.untouched">save</button>
+  </form>
+
+  <button (click)="goBack()">go back</button><br/><br/><br/>
+  <button (click)="delete()">delete acount</button>
+</div>

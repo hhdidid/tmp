@@ -1,0 +1,20 @@
+<nav>
+  <ul>
+    <li>
+      <a routerLink="/home" routerLinkActive="active">Home</a>
+    </li>
+    <li *ngIf="!haveSignIn">
+      <a routerLink="/signup" routerLinkActive="active">Sign up</a>
+    </li>
+    <li *ngIf="!haveSignIn">
+      <a routerLink="/signin" routerLinkActive="active">Sign in</a>
+    </li>
+    <li *ngIf="haveSignIn">
+      <a routerLink="/profile" routerLinkActive="active">profile</a>
+    </li>
+    <li *ngIf="haveSignIn">
+      <a routerLinkActive="active" (click)="signout()">Sign out</a>
+    </li>
+  </ul>
+</nav>
+

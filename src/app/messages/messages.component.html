@@ -1,0 +1,6 @@
+<div *ngIf="msgService.messages.length">
+  <h4>Messages</h4>
+  <!--place the newest message at the top-->
+  <li *ngFor="let msg of msgService.getMsg().slice().reverse()">{{msg}}</li>
+  <button class="clear" (click)="msgService.clear()">clear</button>
+</div>

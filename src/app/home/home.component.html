@@ -4,3 +4,6 @@
 <h1 *ngIf="haveSignIn">
   Hello, {{ currentUser }}!
 </h1>
+<app-moment-editor *ngIf="haveSignIn"></app-moment-editor>
+<!--every time router route to here, it would create MomentListComponent, thus execute its ngOnInit-->
+<app-moment-list></app-moment-list>

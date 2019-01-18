@@ -12,6 +12,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { UserModule } from './user/user.module';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { MomentsModule } from './moments/moments.module';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     HttpClientModule,
     ReactiveFormsModule,
     UserModule,
+    MomentsModule,
     AppRoutingModule,   // notice the order of router
   ],
   providers: [],

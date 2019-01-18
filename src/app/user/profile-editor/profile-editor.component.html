@@ -30,6 +30,14 @@
             [disabled]="profileForm.invalid || profileForm.untouched">save</button>
   </form>
 
-  <button (click)="goBack()">go back</button><br/><br/><br/>
+  <button (click)="goBack()">go back</button><br/>
+
+  <label>my moments: </label><br/>
+
+  <div *ngIf="moments!==null">
+    <app-moment-detail *ngFor="let moment of moments" [moment]="moment" [deletable]="true"></app-moment-detail>
+  </div>
+
+  <br/><br/><br/>
   <button (click)="delete()">delete acount</button>
 </div>

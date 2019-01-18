@@ -15,33 +15,22 @@ export class AuthService {
   ) { }
 
   signinWithCredentials(username: string, password: string) {
-    // TODO
     const user = { id: -1, username: username, password: password, email: '', gravatar: '' };
     this.userService.authUser(user)
       .subscribe(
-        result => {
-          if (result.successful) {
-            localStorage.setItem('haveSignIn', result.successful.toString());
-            localStorage.setItem('currentUser', result.username);
-            localStorage.setItem('email', result.email);
-            if (result.cookie) {
-              result.cookies.forEach(element => {
-                localStorage.setItem(element.name, element.value);
-              });
-            }
+        resultWithCookie => {
+          if (resultWithCookie.successful) {
+            localStorage.setItem('haveSignIn', resultWithCookie.successful.toString());
+            localStorage.setItem('currentUser', username);
+            localStorage.setItem(resultWithCookie.cookie.name, resultWithCookie.cookie.value);
             this.msgService.addMsg('sign in successfully!');
-            this.router.navigate(['']); // navigate to home page, TODO navigate to redirect url
+            this.router.navigate(['/home']);
           } else {
-            this.msgService.addMsg(result.error);
+            this.msgService.addMsg(resultWithCookie.error);
           }
         }
       );
   }
 
-
-  logout(): void {
-    // this.isLoggedIn = false;
-    localStorage.removeItem('haveSignIn');
-  }
 
 }

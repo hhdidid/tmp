@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../models';
+import { User } from '../use';
 import { Location } from '@angular/common';
 import { UserService } from '../services/user.service';
 import { MessageService } from 'src/app/message.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { forbiddenNameValidator, UniqueUsername4ProfileValidator } from 'src/app/shared/custom-validators.directive';
+import { MomentService } from 'src/app/moments/services/moment.service';
+import { Moment } from 'src/app/moments/moment';
 
 @Component({
   selector: 'app-profile-editor',
@@ -13,13 +15,15 @@ import { forbiddenNameValidator, UniqueUsername4ProfileValidator } from 'src/app
   styleUrls: ['./profile-editor.component.css']
 })
 export class ProfileEditorComponent implements OnInit {
-  user: User = { id: -1, username: '', password: '', email: '', gravatar: '' };
+  user: User = new User(-1, localStorage.getItem('currentUser'), '', '', '');
+  moments: Moment[] = [];
   profileForm: FormGroup;
 
   constructor(
     private location: Location,
     private userService: UserService,
     private msgService: MessageService,
+    private momentService: MomentService,
     private router: Router,
     private uniqueUsername4Profile: UniqueUsername4ProfileValidator,
   ) { }
@@ -28,6 +32,7 @@ export class ProfileEditorComponent implements OnInit {
     this.createForm();
 
     this.getUser();
+    this.getMoments();
 
     // if this.createForm depend on the inite state of this.user,
     // do not put the init code of this.profileForm here, since this.getUser() finially execute an async callback.
@@ -40,11 +45,8 @@ export class ProfileEditorComponent implements OnInit {
       .subscribe(
         result => {
           if (result.successful) {
-            this.user.id = result.id;
-            this.user.username = result.username;
-            this.user.email = result.email;
-            this.user.gravatar = result.gravatar;
-
+            this.user = result.user;
+            this.updateForm(this.user.username, this.user.email);
           } else {
             this.msgService.addMsg(result.error);
           }
@@ -52,24 +54,38 @@ export class ProfileEditorComponent implements OnInit {
       );
   }
 
+  getMoments() {
+    console.log('xx');
+    const username = localStorage.getItem('currentUser');
+    this.momentService.getMomentsOf(username)
+      .subscribe(result => {
+        if (result.successful) {
+          this.moments = result.moments === null ? [] : result.moments;
+        } else {
+          this.msgService.addMsg(result.error);
+        }
+      });
+  }
+
   save() {
     // const oldName = this.user.username;
-    this.userService.updateUser(this.user)
+    // const newUser = this.user;   // shallow copy
+    const newUser = new User(this.user.id, this.user.username, this.user.password, this.user.email, this.user.gravatar);
+    newUser.username = this.profileForm.get('username').value;
+    newUser.email = this.profileForm.get('email').value;
+    this.userService.updateUser(newUser)
       .subscribe(
         result => {
           if (result.successful) {
-            this.user.id = result.id;
-            this.user.username = result.username;
-            this.user.email = result.email;
-            localStorage.setItem('currentUser', result.username); // Remember
+            this.user = result.user;
+            localStorage.setItem('currentUser', this.user.username); // remember
             this.msgService.addMsg('update user successfully');
           } else {
             // useless, since this statement is at a callback function.
             // this.user.username = oldName;
-            // this.user.username = localStorage.getItem('currentUser');
             this.msgService.addMsg(result.error);
           }
-          this.updateForm(this.user.username, this.user.email);
+          this.updateForm(this.user.username, this.user.email);   // if error, restore the updateForm
         }
       );
   }
@@ -79,6 +95,9 @@ export class ProfileEditorComponent implements OnInit {
       .subscribe(
         result => {
           if (result.successful) {
+            // also update local moment list, emit a signal
+            localStorage.setItem('updateMomentList', true.toString());
+
             localStorage.setItem('haveSignIn', false.toString());
             this.router.navigate(['/home']);
             this.msgService.addMsg('delete account successfully');
@@ -105,7 +124,7 @@ export class ProfileEditorComponent implements OnInit {
         ],
         updateOn: 'blur',
       }),
-      email: new FormControl(localStorage.getItem('email'), [
+      email: new FormControl('retriving', [
         Validators.required,
         Validators.email,
       ])

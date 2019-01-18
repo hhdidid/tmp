@@ -1,0 +1,8 @@
+<div *ngIf="moments!==null">
+<!-- 
+  <li *ngFor="let moment of moments">
+    {{ moment.content }}
+  </li>
+-->
+  <app-moment-detail *ngFor="let moment of moments" [moment]="moment" [deletable]="false"></app-moment-detail>
+</div>

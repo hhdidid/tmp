@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,7 @@ export class HomeComponent implements OnInit {
   haveSignIn: boolean;
 
   constructor(
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -18,6 +20,12 @@ export class HomeComponent implements OnInit {
     if (this.haveSignIn) {
       this.currentUser = localStorage.getItem('currentUser');
     }
+
+    // subscribe router event, so we can display signup and signin link again when user sign out
+    this.router.events
+      .subscribe((event) => {
+        this.haveSignIn = localStorage.getItem('haveSignIn') === true.toString();
+      });
   }
 
 }

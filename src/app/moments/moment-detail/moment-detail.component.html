@@ -1,0 +1,6 @@
+<div>
+  {{ moment.content }} <br/>
+  @{{ moment.author }} {{ moment.created }}
+  <button *ngIf="deletable" (click)="delete()">delete</button>
+  <!-- (click)="delete" cause nothing happened -->
+</div>

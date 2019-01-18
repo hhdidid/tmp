@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { MessageService } from '../../message.service';
-import { User } from '../models';
+import { User } from '../use';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json'/*, 'withCredentials': 'true'*/ })

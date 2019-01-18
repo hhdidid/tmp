@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'src/app/message.service';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
-import { User } from '../models';
+import { User } from '../use';
 import { forbiddenNameValidator, UniqueUsernameValidator, PwdEqualValidator } from 'src/app/shared/custom-validators.directive';
 
 @Component({

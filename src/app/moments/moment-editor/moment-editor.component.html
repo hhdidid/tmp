@@ -1,0 +1,9 @@
+<div class="container">
+  <div class="form-control">
+    <textarea [formControl]="momentEditor" placeholder="What's on your mind?" class="form-control" required></textarea>
+    <div *ngIf="momentEditor.invalid && (momentEditor.dirty || momentEditor.touched)" class="alert alert-danger">
+      <div *ngIf="momentEditor.errors.required">can not submit nothing!</div>
+    </div>
+  </div>
+  <button class="btn btn-default" [disabled]="momentEditor.invalid" (click)="submit()">submit</button>
+</div>
